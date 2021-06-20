@@ -3,7 +3,7 @@ import utime
 
 servo = PWM(Pin(2))
 servo.freq(50)
-servo.duty_u16(1350)
+servo.duty_u16(1350)#test servo
 utime.sleep(2)
 servo.duty_u16(8200)
 running = True
@@ -20,16 +20,19 @@ def get_message():
         if uart0.any():
                 b0 = uart0.read(1)
                 bUart0 = bUart0 + b0
-                #print("UART(0): " + b0.decode('utf-8'))
+                #print("UART(0): " + b0.decode('utf-8')) for debugging purposes
                 uart0.write(b0.upper().decode('utf-8'))
     return bUart0.decode("utf-8")
-led.value(1)
-mes = get_message()#.decode("utf-8")
+led.value(1)# to show physically the program is running
+mes = get_message()
 led.value(0)
 print(mes)
 
 
-
+#quick test with led to make sure concept works as using an actual servo would use too much
+#power to the point the hc-05 module resets and has to wait to reconnect
+#currently working on a solution to the issue by powering the raspberry pico and all other 
+#components by an external battery
 while running:
     cmd = get_message()
     if "led" in cmd and "on" in cmd:
