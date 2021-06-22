@@ -1,19 +1,12 @@
+#importing libraries
 import serial
 import time
 
+#setting uart 
 uart_channel = serial.Serial("/dev/ttyAMA0", baudrate = 9600, timeout=2)
 running = True
 
-#data1 = ""
-#data = ""
-#while 1:
-#	data = uart_channel.read(1)
-#	data1+=data
-#	print(data)
-#	uart_channel.flush()
-#	data = ""
-#	data1 = ""
-#############################################
+debug = False
 
 def cur_ms():
 	#gets current time in milliseconds
@@ -26,14 +19,16 @@ def get_message():
 	while not found:
 		data = uart_channel.read(1)
 		data1 += data.decode("utf-8")
-		#print(data)
-		#print(data1)
+		if debug: #change debug to True to you know.... get debugging info
+			print(data)
+			print(data1)
 		uart_channel.flush()
-		if data.decode("utf-8") == '>':
+		if data.decode("utf-8") == '>': #wait for end or transmission sign
 			found = True
 		data = ""
 	return data1
 
-while running:
+while running: #just testing to see if it works right now it only spits out what it finds
 	cmd = get_message()
 	print(cmd)
+
